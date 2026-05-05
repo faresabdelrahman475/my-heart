@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hob</title>
-    <!-- استدعاء خط يدوي مزخرف من Google Fonts -->
+    <title>By Fares - Heart Drawing</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     
     <style>
@@ -15,17 +14,65 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
-            /* تطبيق الخط المزخرف على الصفحة */
             font-family: 'Dancing Script', cursive;
         }
-        canvas {
-            display: block;
+
+        #loginOverlay {
+            position: absolute;
+            z-index: 10;
+            text-align: center;
+            background: rgba(20, 20, 20, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid pink;
+            box-shadow: 0 0 20px rgba(255, 192, 203, 0.3);
         }
+        
+        #loginOverlay h2 {
+            color: pink; 
+            font-family: sans-serif;
+            margin-bottom: 20px;
+        }
+
+        #loginOverlay input {
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            font-size: 18px;
+            text-align: center;
+            width: 220px;
+            background-color: #eee;
+        }
+
+        #loginOverlay button {
+            padding: 10px 30px;
+            margin-top: 20px;
+            background-color: pink;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: sans-serif;
+            transition: 0.3s;
+        }
+
+        #loginOverlay button:hover {
+            background-color: #ffb6c1;
+            transform: scale(1.05);
+        }
+
+        /* Elements to hide initially */
+        #topText, #bottomText, #heartCanvas {
+            display: none;
+        }
+        
+        canvas { display: block; }
         
         #topText {
             position: absolute;
             top: 8%; 
-            font-size: 50px; /* تكبير الخط ليظهر جمال الزخرفة */
+            font-size: 50px;
             font-weight: bold;
             color: pink;
             text-shadow: 0 0 15px rgba(255, 192, 203, 0.7), 0 0 5px white;
@@ -43,20 +90,50 @@
 </head>
 <body>
 
-    <div id="topText">I Love You Rahma For Ever</div>
+    <!-- Login Overlay UI -->
+    <div id="loginOverlay">
+        <h2>Enter Password</h2>
+        <!-- type="password" ensures characters are hidden -->
+        <input type="password" id="passInput" placeholder="Password">
+        <br>
+        <button onclick="unlock()">Login</button>
+        <p id="errMsg" style="color: #ff4d4d; font-family: sans-serif; margin-top: 15px; font-size: 14px;"></p>
+    </div>
+
+    <!-- Original Content -->
+    <div id="topText">I Love You</div>
     <canvas id="heartCanvas"></canvas>
     <div id="bottomText">By Fares</div>
 
     <script>
         const canvas = document.getElementById('heartCanvas');
         const ctx = canvas.getContext('2d');
+        let i = 0;
+        const scale = 15;
+
+        function unlock() {
+            const pass = document.getElementById('passInput').value;
+            const correctPass = "17/2/2026"; 
+
+            if (pass === correctPass) {
+                // Hide overlay and show content
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('topText').style.display = 'block';
+                document.getElementById('bottomText').style.display = 'block';
+                document.getElementById('heartCanvas').style.display = 'block';
+                
+                resize();
+                draw();
+            } else {
+                document.getElementById('errMsg').innerText = "Incorrect Password! Please try again.";
+            }
+        }
 
         function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
         window.addEventListener('resize', resize);
-        resize();
 
         function heartX(t) {
             return 15 * Math.pow(Math.sin(t), 3);
@@ -65,9 +142,6 @@
         function heartY(t) {
             return -(12 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
         }
-
-        let i = 0;
-        const scale = 15; 
 
         function draw() {
             if (i > 300) return; 
@@ -90,8 +164,6 @@
             i += 0.1; 
             requestAnimationFrame(draw); 
         }
-
-        draw();
     </script>
 </body>
 </html>
